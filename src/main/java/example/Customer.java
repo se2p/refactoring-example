@@ -27,7 +27,7 @@ public class Customer {
         String result = "Rental Record for " + getName() + "\n";
         for(Rental each : rentals) {
 
-            double thisAmount = getAmountFor(each);
+            double thisAmount = each.getCharge();
 
             // add frequent renter points
             frequentRenterPoints++;
@@ -47,28 +47,6 @@ public class Customer {
         return result;
     }
 
-    private double getAmountFor(Rental aRental) {
-        double result = 0;
-        // determine amounts for each line
-
-        switch (aRental.getMovie().getPriceCode()) {
-            case Movie.REGULAR:
-                result += 2;
-                if (aRental.getDaysRented() > 2)
-                    result += (aRental.getDaysRented() - 2) * 1.5;
-                break;
-            case Movie.NEW_RELEASE:
-                result += aRental.getDaysRented() * 3;
-                break;
-            case Movie.CHILDREN:
-                result += 1.5;
-                if(aRental.getDaysRented() > 3)
-                    result += (aRental.getDaysRented() - 3) * 1.5;
-                break;
-        }
-        return result;
-    }
-
     public String htmlStatement() {
         // creates html output with all available information about given customer
         double totalAmount = 0;
@@ -77,7 +55,7 @@ public class Customer {
         String result = "<h1>Rental Record for " + getName() + "</h1><ul>\n";
 
         for(Rental each : rentals) {
-            double thisAmount = getAmountFor(each);
+            double thisAmount = each.getCharge();
 
             // add frequent renter points
             frequentRenterPoints++;
