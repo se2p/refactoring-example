@@ -5,20 +5,32 @@ public class Movie {
     public static final int REGULAR = 0;
     public static final int NEW_RELEASE = 1;
     private String title;
-    private int priceCode;
+    private MovieState movieState;
 
     // regular movie or for children or ...
     public Movie(String title, int priceCode) {
         this.title = title;
-        this.priceCode = priceCode;
+        setPriceCode(priceCode);
     }
 
     public int getPriceCode() {
-        return priceCode;
+        return movieState.getPriceCode();
     }
 
-    public void setPriceCode(int arg) {
-        priceCode = arg;
+    public void setPriceCode(int priceCode) {
+        switch(priceCode) {
+            case REGULAR:
+                movieState = new RegularMovie();
+                break;
+            case NEW_RELEASE:
+                movieState = new NewMovie();
+                break;
+            case CHILDREN:
+                movieState = new ChildrenMovie();
+                break;
+            default:
+                throw new IllegalArgumentException("Illegal pricecode");
+        }
     }
 
     public String getTitle() {
