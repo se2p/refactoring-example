@@ -21,20 +21,13 @@ public class Customer {
 
     public String statement() {
         // creates listing (text output) with all available information about given customer
-        double totalAmount = 0;
-        int frequentRenterPoints = 0;
+        double totalAmount = getTotalCharge();
+        int frequentRenterPoints = getTotalFrequentRenterPoints();
 
         String result = "Rental Record for " + getName() + "\n";
         for(Rental each : rentals) {
-
-            double thisAmount = each.getCharge();
-
-            // add frequent renter points
-            frequentRenterPoints += each.getFrequentRenterPoints();
-
             // show figures for this rental
-            result += "\t" + each.getMovie().getTitle() + "\t" + String.valueOf(thisAmount) + "\n";
-            totalAmount += thisAmount;
+            result += "\t" + each.getMovie().getTitle() + "\t" + String.valueOf(each.getCharge()) + "\n";
         }
 
         // add footer lines
@@ -45,25 +38,27 @@ public class Customer {
 
     public String htmlStatement() {
         // creates html output with all available information about given customer
-        double totalAmount = 0;
-        int frequentRenterPoints = 0;
+        double totalAmount = getTotalCharge();
+        int frequentRenterPoints = getTotalFrequentRenterPoints();
 
         String result = "<h1>Rental Record for " + getName() + "</h1><ul>\n";
 
         for(Rental each : rentals) {
-            double thisAmount = each.getCharge();
-
-            // add frequent renter points
-            frequentRenterPoints += each.getFrequentRenterPoints();
-
             // show figures for this rental
-            result += "<li>\t" + each.getMovie().getTitle() + "\t" + String.valueOf(thisAmount) + "</li>\n";
-            totalAmount += thisAmount;
+            result += "<li>\t" + each.getMovie().getTitle() + "\t" + String.valueOf(each.getCharge()) + "</li>\n";
         }
 
         // add footer lines
         result += "<ul>\n<p>Amount owed is " + String.valueOf(totalAmount) + "</p>\n";
         result += "<p>You earned " + String.valueOf(frequentRenterPoints) + " frequent renter points</p>";
         return result;
+    }
+
+    public double getTotalCharge() {
+        return rentals.stream().mapToDouble(e -> e.getCharge()).sum();
+    }
+
+    public int getTotalFrequentRenterPoints() {
+        return rentals.stream().mapToInt(e -> e.getFrequentRenterPoints()).sum();
     }
 }
